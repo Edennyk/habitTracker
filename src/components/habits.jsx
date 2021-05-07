@@ -1,51 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Habit from './habit';
+import HabitAddForm from './habitAddForm';
 
-export default class Habits extends Component {
-    state = {
-        habits:[{id: 1, name: 'Reading', count:0},
-                {id: 2 ,name: 'Eating', count:0},
-                {id: 3 ,name: 'Walking', count:0},
-        ],
-    };
+const Habits = ({ habits, onIncrement, onDecrement, onDelete, onAdd, onReset }) => {
+  return (
+    <div className="habits">
+      <HabitAddForm onAdd={onAdd} />
+      <ul>
+        {habits.map(habit => (
+          <Habit
+            key={habit.id}
+            habit={habit}
+            onIncrement={onIncrement}
+            onDecrement={onDecrement}
+            onDelete={onDelete}
+          />
+        ))}
+      </ul>
+      <button className="habits-reset" onClick={onReset}>
+        Reset All
+      </button>
+    </div>
+  );
+};
 
-    handleIncrement = habit => {
-       // console.log(`handleIncrement ${habit.name}`);
-        const habits = [...this.state.habits];
-        const index = habits.indexOf(habit);
-        habits[index].count++;
-        this.setState({habits:habits});
-    };
-
-    handleDecrement = habit => {
-       // console.log(`handleDecrement ${habit.name}`);
-        const habits = [...this.state.habits];
-        const index = habits.indexOf(habit);
-        const count = habits[index].count-1;
-        habits[index].count = count < 0 ? 0 : count;
-        this.setState({habits:habits});
-    };
-
-    handleDelete = habit =>{
-        //console.log(`handleDelete ${habit.id}`);
-        const habitsDel = this.state.habits.filter(item => item.id !== habit.id);
-        this.setState({habits: habitsDel});
-
-    };
-
-    render() {
-        return (
-            <ul>
-                {this.state.habits.map(habit => (
-                    <Habit 
-                    key={habit.id} 
-                    habit={habit} 
-                    onIncrement={this.handleIncrement}
-                    onDecrement={this.handleDecrement}
-                    onDelete={this.handleDelete}
-                    />
-                ))}
-            </ul>
-        );
-    }
-}
+export default Habits;
